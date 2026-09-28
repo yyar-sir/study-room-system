@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>静学共享自习室预约与管理系统</title>
+    <!--
+      防主题闪烁：必须在样式表之前同步执行。
+      否则深色偏好用户会先看到一帧白底，再跳成深色。
+      逻辑与 src/composables/useTheme.js 的 resolveInitial/applyTheme 一致，
+      改一处要同步改另一处。
+    -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme')
+          var dark = saved
+            ? saved === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+          var t = dark ? 'dark' : 'light'
+          document.documentElement.dataset.theme = t
+          document.documentElement.classList.toggle('dark', dark)
+          document.documentElement.style.colorScheme = t
+        } catch (e) {
+          /* localStorage 不可用时按浅色渲染 */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

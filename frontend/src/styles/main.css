@@ -1,0 +1,601 @@
+/* ============================================================
+   静学共享自习室 · 设计系统 v1
+   方向：深海军蓝 + 暖橙单 accent，细边框取代软阴影，渐变清零
+   ============================================================ */
+
+:root {
+  /* ===== 主色：沉稳钴蓝（去 AI 亮蓝紫） ===== */
+  --brand: #1e4fd8;
+  --brand-deep: #163a9e;
+  /* 实心按钮 hover 时的底色。与 --brand-deep 拆开是因为后者还要当
+     「强调文字色」用：深色主题下文字色必须变亮，而按钮底色得保持深
+     （上面压着白字）。同一个变量扛两种角色，深色下必然有一边坏掉。 */
+  --brand-hover: #163a9e;
+  /* 品牌色「当文字用」的取值。必须与 --brand 分开：
+     --brand 要够深才能让压在上面的白字达标（浅色 5.5:1 / 深色 4.6:1），
+     而它自己当文字压在页面底色上时又必须够亮。
+     数学上二者不可兼得——深色主题下「当文字」需 L≥0.210、「当背景」需 L≤0.183。
+     浅色下两者恰好都取 #1e4fd8（白底 5.5:1），所以这个 token 只改深色主题的表现。 */
+  --brand-ink: #1e4fd8;
+  --brand-soft: #e2e9fa;
+  --navy: #15285c;
+  --navy-soft: #223a75;
+
+  /* 兼容 token：v4 起均为纯色（渐变清零） */
+  --brand-grad: #1e4fd8;
+  --brand-grad-soft: #e2e9fa;
+
+  /* ===== 暖橙 accent（唯一强调色） ===== */
+  --accent: #ff8a3d;
+  /* 深一档，用于「浅橙底 + 深橙字」的标签。原值 #e06e1f 压 #fff0e2 只有 2.93:1 */
+  --accent-deep: #a84e17;
+  /* 同 --brand-hover：实心橙色按钮的 hover 底色，与「强调文字色」拆开 */
+  --accent-hover: #e06e1f;
+  --accent-soft: #fff0e2;
+
+  /* 语义点缀（仅标签等小元素） */
+  --c-green: #2e9e6b;
+  --c-pink: #e05c8a;
+  --c-teal: #178a7d;
+  --c-yellow: #d9a20b;
+
+  /* ===== 语义状态色：底 / 字 / 边 三件套 =====
+     座位状态、违规标签、流水里的正负值都要用「浅底 + 深字」表达状态。
+     此前这些值散落在各页面各写一份（维修橙重复 12 次、停用灰 8 次、占用粉 4 次），
+     改一次配色要翻十几个文件，且很容易漏改导致同类状态颜色不一致。
+     统一收到这里，页面只写 var(--warn-bg) 这类语义名。 */
+  --ok-bg: #e4f4ec;      --ok-fg: #1f7a52;      --ok-line: #bfe3d1;
+  --warn-bg: #ffe3c7;    --warn-fg: #8f4f0e;    --warn-line: #f3cda3;
+  --danger-bg: #f7dada;  --danger-fg: #9b3b3b;  --danger-line: #e8b9b9;
+  --muted-bg: #e3e6ee;   --muted-fg: #5b6478;   --muted-line: #d3d8e3;
+  /* 标签用的三个附加色系，与上面的状态色同构（浅底 + 深字），供 .k-tag--* 使用 */
+  --pink-bg: #fceaf1;    --pink-fg: #b03a63;
+  --teal-bg: #e0f3f0;    --teal-fg: #0f6b61;
+  --yellow-bg: #fbf3dc;  --yellow-fg: #8a6606;
+
+  /* ===== 中性色（近白纸感） ===== */
+  --ink: #1c2740;
+  --ink-2: #4c5a78;
+  /* ⚠️ 这个值是按 WCAG AA 反推的，不是凭手感挑的。
+     原值 #8896b4 在白底上只有 2.97:1，远低于正文要求的 4.5:1；
+     它被用作所有 hint / 表单标签 / KPI 小字 / table 空态说明，
+     一改就同时修掉 20 个页面上的约 60 处不达标。
+     4.89:1 与 --ink-2 的 6.91:1、--ink 的 13:1 仍保持清晰的三级层次。 */
+  --ink-3: #66718a;
+  --line: #e6eaf3;
+  --bg: #f8fafd;
+  --card: #ffffff;
+  --surface-soft: #f4f7fc;
+  /* 顶栏需要半透明（毛玻璃），无法直接用 --card */
+  --topbar-bg: rgba(255, 255, 255, 0.92);
+  /* ghost 按钮的描边：比 --line 更偏品牌蓝 */
+  --brand-line: #c8d3ee;
+  /* 这两个在浅色下是「比背景稍深一点」的浅蓝，深色下必须跟着变暗，
+     否则会变成深色页面上刺眼的亮线 */
+  --scroll-thumb: #c7d1e8;
+  --input-line: #d9e1f2;
+
+  /* ===== 形状 ===== */
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+  /* 行内 code 小标签。此前各页面直接写 6px，共 5 处。 */
+  --radius-chip: 6px;
+  /* 12px 方点这类极小色块。此前各页面直接写 4px，共 3 处。 */
+  --radius-xs: 4px;
+  /* 胶囊形状（标签、用户片、开关）。此前各页面直接写 999px，共 10 处。 */
+  --radius-pill: 999px;
+
+  /* ===== 阴影：细边框声明层级，阴影极轻 ===== */
+  --shadow-card: 0 1px 2px rgba(21, 40, 92, 0.05);
+  --shadow-hover: 0 10px 28px rgba(21, 40, 92, 0.1);
+  --shadow-float: 0 12px 32px rgba(21, 40, 92, 0.14);
+
+  /* ===== 排版阶梯 ===== */
+  --font-title: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-body: 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  --fs-h1: 34px;
+  --fs-stat: 26px;   /* KPI 大数字：首页/看板/工作台的数值卡片，此前 4 处各写 26px */
+  --fs-h2: 24px;
+  --fs-lg: 18px;     /* 中间档：介于 h3(17) 与 h2(24) 之间，用于次级标题与强调数值 */
+  --fs-h3: 17px;
+  --fs-body: 15px;
+  --fs-sm: 13px;
+  --fs-xs: 12px;
+  --fs-2xs: 11px;    /* 座位号、极小注脚 */
+  --leading-tight: 1.2;
+  --leading-body: 1.65;
+  --measure: 65ch;
+
+  /* ===== 间距节奏 ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+
+  /* ===== Element Plus 主题映射 ===== */
+  --el-color-primary: var(--brand);
+  --el-color-primary-light-3: #5479e2;
+  --el-color-primary-light-5: #8aa4ea;
+  --el-color-primary-light-7: #c1cff3;
+  --el-color-primary-light-8: #e2e9fa;
+  --el-color-primary-light-9: #f0f4fd;
+  --el-color-primary-dark-2: #163a9e;
+  --el-border-radius-base: 12px;
+  --el-font-family: var(--font-body);
+  --el-text-color-primary: var(--ink);
+  --el-text-color-regular: var(--ink-2);
+  /* 之前漏了这一条，于是 el-table 表头沿用 Element Plus 默认的 #909399，
+     在白底上只有 3.08:1 —— 12 个页面的表头全部不达标。 */
+  --el-text-color-secondary: var(--ink-3);
+  --el-text-color-placeholder: var(--ink-3);
+  /* el-input 的字数统计用的是 --el-color-info（EP 默认 #909399，白底上 3.08:1），
+     不是 text-color-* 系列，所以必须单独映射一次。 */
+  --el-color-info: var(--ink-3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+b, strong, .stat-num, .num {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: rgba(30, 79, 216, 0.18);
+  color: var(--ink);
+}
+
+input,
+textarea {
+  caret-color: var(--brand);
+}
+
+:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ===== 标题排版 ===== */
+h1, h2, h3, h4, .k-title {
+  font-family: var(--font-title);
+  letter-spacing: 0.02em;
+  line-height: var(--leading-tight);
+  font-weight: 400;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-h1); letter-spacing: 0.005em; }
+
+a {
+  color: var(--brand-ink);
+  text-decoration: none;
+}
+
+/* ============================================================
+   页面容器与分区节奏
+   ============================================================ */
+.k-page {
+  /* ⚠️ width: 100% 不能省。本元素同时是 .main / .user-layout
+     （display:flex; flex-direction:column）的 flex item，而下面又有 margin:0 auto。
+     按 flex 规范，交叉轴的 margin 一旦是 auto 就不再 stretch，元素会收缩到
+     「内容宽度」——实测只剩 666px，max-width: 1160px 完全没生效，
+     看板的图表网格因此只能排 1 列。显式 width:100% 后由 max-width 收口并居中。 */
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-8);
+}
+
+.k-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: var(--space-7) 0 var(--space-5);
+}
+
+.k-section-head h2 {
+  margin: 0;
+  font-size: var(--fs-h2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.k-section-head .more {
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.k-section-head .more:hover {
+  color: var(--brand-ink);
+}
+
+.page-head {
+  margin-bottom: var(--space-6);
+}
+
+.k-h1-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.k-h1-icon svg {
+  color: var(--brand-ink);
+  font-size: 26px;
+}
+
+/* ============================================================
+   卡片：细边框 + 极轻阴影（一次 elevation）
+   ============================================================ */
+.k-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5) var(--space-6);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.k-card--hover:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand-line);
+  box-shadow: var(--shadow-hover);
+}
+
+/* 无卡列表 */
+.k-plain-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.k-plain-list > * + * {
+  border-top: 1px solid var(--line);
+}
+
+/* ============================================================
+   图标系统
+   ============================================================ */
+.icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  flex-shrink: 0;
+}
+
+.icon-box--sm { width: 28px; height: 28px; border-radius: var(--radius-sm); }
+
+/* ============================================================
+   按钮：纯色（无渐变），按压反馈
+   ============================================================ */
+.k-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 11px 24px;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  color: #fff;
+  background: var(--brand);
+  box-shadow: 0 3px 10px rgba(30, 79, 216, 0.25);
+}
+
+.k-btn:hover {
+  background: var(--brand-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 79, 216, 0.32);
+}
+
+.k-btn:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 0.06s;
+}
+
+.k-btn svg { font-size: 17px; }
+
+.k-btn--ghost {
+  background: var(--card);
+  color: var(--brand-ink);
+  border: 1.5px solid var(--brand-line);
+  box-shadow: none;
+}
+
+.k-btn--ghost:hover {
+  border-color: var(--brand);
+  background: var(--card);
+}
+
+.k-btn--orange { background: var(--accent); box-shadow: 0 3px 10px rgba(255, 138, 61, 0.3); }
+.k-btn--orange:hover { background: var(--accent-hover); }
+
+.k-btn--navy { background: var(--navy); box-shadow: 0 3px 10px rgba(21, 40, 92, 0.3); }
+.k-btn--navy:hover { background: var(--navy-soft); }
+
+.k-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================================
+   小标签
+   ============================================================ */
+.k-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+}
+
+.k-tag--orange { background: var(--accent-soft); color: var(--accent-deep); }
+.k-tag--green { background: var(--ok-bg); color: var(--ok-fg); }
+.k-tag--pink { background: var(--pink-bg); color: var(--pink-fg); }
+.k-tag--teal { background: var(--teal-bg); color: var(--teal-fg); }
+.k-tag--yellow { background: var(--yellow-bg); color: var(--yellow-fg); }
+
+.k-stars {
+  color: var(--c-yellow);
+  font-size: var(--fs-sm);
+  letter-spacing: 1.5px;
+}
+
+.k-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ============================================================
+   Element Plus 补丁
+   ============================================================ */
+.el-button {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: transform 0.16s ease, box-shadow 0.2s ease;
+}
+
+.el-button:active {
+  transform: scale(0.97);
+}
+
+.el-input__wrapper,
+.el-textarea__inner {
+  border-radius: var(--radius-md);
+  background: var(--surface-soft);
+  box-shadow: 0 0 0 1px var(--input-line) inset;
+}
+
+.el-input__wrapper:hover,
+.el-textarea__inner:hover {
+  box-shadow: 0 0 0 1px var(--brand) inset;
+}
+
+.el-input__wrapper:focus-within,
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 1.5px var(--brand) inset !important;
+}
+
+.el-dialog {
+  border-radius: var(--radius-lg);
+}
+
+.el-message {
+  border-radius: var(--radius-pill);
+}
+
+.el-empty__description p {
+  color: var(--ink-3);
+}
+
+/* ============================================================
+   动效
+   ============================================================ */
+.fade-page-enter-active {
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fade-page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.k-float {
+  animation: float-y 3.5s ease-in-out infinite;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   深色主题
+   ------------------------------------------------------------
+   选择器用 html[data-theme="dark"]（特异度 0,1,1）：与 Element Plus 的
+   html.dark 同权重，而 main.css 在其后加载，因此这里能压过 EP 的暗色默认值。
+
+   ⚠️ EP 暗色用的是中性灰（--el-bg-color: #141414），与我们的藏青调不搭。
+   所以 --el-bg-color / --el-border-color / --el-fill-color-* 也要一并拉过来，
+   否则会出现「自绘卡片是深蓝、el-table 是灰色」的半深色。
+   ============================================================ */
+html[data-theme='dark'] {
+  /* ---- 中性色：藏青调深色，不用纯黑，避免和品牌蓝脱节 ---- */
+  --bg: #0f1526;
+  --card: #171f33;
+  --surface-soft: #1e273e;
+  --line: #2a3652;
+  --ink: #e9edf7;
+  --ink-2: #aeb9d1;
+  --ink-3: #7b87a3;
+  --topbar-bg: rgba(15, 21, 38, 0.88);
+  --brand-line: #3a4a72;
+  --scroll-thumb: #313d5c;
+  --input-line: #313d5c;
+
+  /* ---- 品牌色 ----
+     浅色下 --brand(#1e4fd8) 在深底上偏暗、白字对比也不够，整体提亮一档。
+     --brand-hover 仍保持「比 --brand 更深」以表达按下感。 */
+  --brand: #4a6ce8;
+  --brand-hover: #3a58c8;
+  /* 浅色下 --brand-deep 是深蓝（当强调文字用）；深底上必须反过来变亮，
+     否则 kpi-value / code / 套餐价这些全都会糊在背景里。 */
+  --brand-deep: #8ba3f5;
+  /* 深色下 --brand(#4a6ce8) 当文字只有 3.6~4.0:1，达不到 4.5:1，
+     所以文字场景改用更亮的一档；它当背景（按钮底 + 白字）时仍用 --brand。 */
+  --brand-ink: #8ba3f5;
+  --brand-soft: #22305a;
+  --brand-grad: #4a6ce8;
+  --brand-grad-soft: #22305a;
+
+  /* 侧栏与登录页左侧品牌区：深色下要比 --bg 更暗，
+     才能保住「深色面板 + 浅色内容」的分区感（浅色主题里是深蓝 vs 白）。 */
+  --navy: #0a0f1c;
+  --navy-soft: #141d33;
+
+  --accent: #ff8a3d;
+  --accent-hover: #e87a2e;
+  --accent-deep: #ffa869;
+  --accent-soft: #3a2716;
+
+  /* ---- 图表与标签用色：整体提亮一档，深底上才看得清 ---- */
+  --c-green: #4ec98a;
+  --c-pink: #f07aa0;
+  --c-teal: #3fc0ae;
+  --c-yellow: #e8bc3c;
+
+  /* ---- 状态色：由「浅底 + 深字」翻转为「深底 + 浅字」 ---- */
+  --ok-bg: #13301f;      --ok-fg: #6fdc9d;      --ok-line: #24523a;
+  --warn-bg: #362611;    --warn-fg: #f0b264;    --warn-line: #57411f;
+  --danger-bg: #35191c;  --danger-fg: #f08a8a;  --danger-line: #582b2f;
+  --muted-bg: #232c42;   --muted-fg: #9aa5bd;   --muted-line: #333e59;
+  --pink-bg: #35192a;    --pink-fg: #f08ab4;
+  --teal-bg: #0f2f2c;    --teal-fg: #63d6c6;
+  --yellow-bg: #332b10;  --yellow-fg: #e0c060;
+
+  /* ---- 阴影：深色下靠加深表达层级，而不是靠边框 ---- */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  /* ---- 把 Element Plus 的底色/描边拉齐到藏青调 ---- */
+  --el-color-primary: var(--brand);
+  --el-text-color-primary: var(--ink);
+  --el-text-color-regular: var(--ink-2);
+  --el-text-color-secondary: var(--ink-3);
+  --el-text-color-placeholder: var(--ink-3);
+  --el-text-color-disabled: #5b6478;
+  --el-color-info: var(--ink-3);
+
+  --el-bg-color: var(--card);
+  --el-bg-color-page: var(--bg);
+  --el-bg-color-overlay: var(--surface-soft);
+  --el-fill-color-blank: var(--card);
+  --el-fill-color: var(--surface-soft);
+  --el-fill-color-light: var(--surface-soft);
+  --el-fill-color-lighter: #232c42;
+  --el-fill-color-extra-light: #232c42;
+  --el-fill-color-dark: var(--line);
+  --el-fill-color-darker: var(--brand-line);
+
+  --el-border-color: var(--line);
+  --el-border-color-light: var(--line);
+  --el-border-color-lighter: #232c42;
+  --el-border-color-extra-light: var(--surface-soft);
+  --el-border-color-dark: var(--brand-line);
+  --el-border-color-darker: var(--brand-line);
+
+  --el-disabled-bg-color: var(--surface-soft);
+  --el-disabled-text-color: #5b6478;
+  --el-disabled-border-color: var(--line);
+
+  --el-mask-color: rgba(8, 12, 22, 0.8);
+  --el-mask-color-extra-light: rgba(8, 12, 22, 0.3);
+}
+
+/* 浅色下的选区是淡蓝底，深色下几乎看不见，单独覆盖 */
+html[data-theme='dark'] ::selection {
+  background: rgba(90, 124, 240, 0.35);
+  color: var(--ink);
+}
+
+/*
+  Element Plus 把「选中态文字」也接到 --el-color-primary 上，而这个变量同时
+  要给主按钮当背景色（上面压白字）。两者对亮度的要求正好相反，改变量解决不了，
+  只能针对这两个组件单独覆盖。这也是 --brand-ink 存在的第二个理由。
+*/
+html[data-theme='dark'] .el-tabs__item.is-active,
+html[data-theme='dark'] .el-tabs__item.is-active:hover,
+html[data-theme='dark'] .el-radio.is-checked .el-radio__label {
+  color: var(--brand-ink);
+}

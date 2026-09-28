@@ -1,0 +1,53 @@
+# Dependencies and build outputs
+node_modules/
+dist/
+target/
+*.class
+*.jar
+*.log
+.vite/
+
+# Local secrets - NEVER commit
+backend/src/main/resources/application-local.yml
+backend/src/main/resources/application-prod.yml
+.env
+.env.*
+.baoyu-skills/
+*.pem
+*.key
+
+# School materials and personal files
+*.docx
+*.doc
+*.pdf
+*.pptx
+*.ppt
+docs/
+
+# Copyrighted assets
+frontend/public/videos/
+
+# Backups and one-off scripts
+*.bak
+backend/sql/fix*.sql
+backups/
+
+# Development process files
+_audit/
+_ppt/
+_tools/
+user-path-backup.txt
+
+# Screenshots - keep png only
+shots/*
+!shots/*.png
+
+# Editor and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# 学校答辩材料
+*讲稿*.md

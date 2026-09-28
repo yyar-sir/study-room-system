@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: study-room
+  profiles:
+    # 本地开发默认激活 local profile，会额外加载 application-local.yml（该文件含真实账号，不入库）。
+    # 首次克隆本项目时：把 application-local.yml.example 复制为 application-local.yml 并填写自己的数据库账号，
+    # 或者直接通过环境变量 DB_URL / DB_USERNAME / DB_PASSWORD / JWT_SECRET 注入。
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  datasource:
+    url: "${DB_URL:jdbc:mysql://127.0.0.1:3306/study_room?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}"
+    username: ${DB_USERNAME:study_room}
+    password: ${DB_PASSWORD:change-me}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+# JWT 配置（secret 请通过环境变量 JWT_SECRET 注入，长度不少于 32 字符）
+jwt:
+  secret: ${JWT_SECRET:change-me-to-a-random-string-at-least-32-characters}
+  expire-hours: 72
+
+# 数据备份
+#   mysqldump 若不在 PATH 中，请在 application-local.yml（已被 gitignore）里写绝对路径，
+#   不要把本机安装路径提交进仓库。
+backup:
+  dir: ${BACKUP_DIR:backups}
+  mysqldump: ${MYSQLDUMP:mysqldump}
+
+logging:
+  level:
+    com.wzbc.studyroom: debug
